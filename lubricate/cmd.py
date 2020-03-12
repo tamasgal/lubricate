@@ -24,7 +24,8 @@ import lubricate as lc
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 TEMPLATES_PATH = os.path.join(BASE_PATH, "templates")
-TEMPLATES = {t: os.path.join(TEMPLATES_PATH, t) for t in ["base", "analysis"]}
+TEMPLATE_BASE = os.path.join(TEMPLATES_PATH, "base")
+TEMPLATES = {t: os.path.join(TEMPLATES_PATH, t) for t in ["python", "analysis"]}
 VENV_FOLDER = "venv"
 
 
@@ -49,7 +50,7 @@ def initialise_project(path, kind):
 
 def create_folder_structure(path, kind):
     """Creates the folder structure in the given path"""
-    shutil.copytree(TEMPLATES["base"], path)
+    shutil.copytree(TEMPLATE_BASE, path)
     merge_folders(TEMPLATES[kind], path)
 
 
@@ -76,10 +77,12 @@ def initialise_git(path):
 
 
 def create_virtualenv(path):
+    """Creats an isolated virtual Python environment"""
     venv.create(os.path.join(path, VENV_FOLDER), with_pip=True)
 
 
 def install_packages(path):
+    """Install all required Python packages"""
     pip_cmd = os.path.join(path, VENV_FOLDER, "bin", "pip")
     subprocess.run([pip_cmd, "install", "--upgrade", "pip", "setuptools"])
     with open(os.path.join(path, "requirements.txt")) as fobj:
@@ -89,6 +92,11 @@ def install_packages(path):
 
 def main():
     args = docopt(__doc__)
+
+    if args['KIND'] not in TEMPLATES.keys():
+        print("'{}' projects are not supported. Pick one of these: {}"
+              .format(args['KIND'], ', '.join(TEMPLATES.keys())))
+        exit(1)
 
     if args["--version"]:
         print(lc.version)
