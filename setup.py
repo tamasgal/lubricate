@@ -16,7 +16,7 @@ THISPATH = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(THISPATH, "requirements.txt")) as fobj:
     requirements = [l.strip() for l in fobj.readlines()]
 
-with open(os.path.join(THISPATH, "README.md"), encoding="utf-8") as f:
+with open(os.path.join(THISPATH, "README.md")) as f:
     long_description = f.read()
 
 setup(
