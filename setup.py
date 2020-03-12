@@ -4,19 +4,20 @@
 The lubricate setup script.
 
 """
+import os
 from setuptools import setup
 
 __author__ = 'Zineb Aly and Tamas Gal'
 __email__ = 'zaly@km3net.de, tgal@km3net.de'
 
-with open('requirements.txt') as fobj:
+
+THISPATH = os.path.abspath(os.path.dirname(__file__))
+
+with open(os.path.join(THISPATH, "requirements.txt")) as fobj:
     requirements = [l.strip() for l in fobj.readlines()]
 
-try:
-    with open("README.rst") as fh:
-        long_description = fh.read()
-except UnicodeDecodeError:
-    long_description = "Decrease the friction when starting an analysis."
+with open(os.path.join(THISPATH, "README.md"), encoding="utf-8") as f:
+    long_description = f.read()
 
 setup(
     name='lubricate',
@@ -24,6 +25,7 @@ setup(
     description=long_description,
     author=__author__,
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author_email=__email__,
     packages=['lubricate'],
     include_package_data=True,
