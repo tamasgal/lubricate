@@ -3,11 +3,13 @@
 The analysis lubricator.
 
 Usage:
-    lubricate [options] new PROJECT_PATH
+    lubricate [options] new KIND PROJECT_PATH
     lubricate (-h | --help)
     lubricate --version
 
 Options:
+    KIND          The kind of the project to create (analysis, python)
+                  [default: analysis]
     -h --help     Show this screen.
     -v            Verbose output.
     --version     Show the version.
@@ -15,6 +17,7 @@ Options:
 import os
 import shutil
 import subprocess
+import tempfile
 import venv
 from docopt import docopt
 import lubricate as lc
@@ -27,11 +30,18 @@ VENV_FOLDER = "venv"
 
 def initialise_project(path, kind):
     """The main initialisation routine to create a project."""
+    print("Bootstrapping a new {} project...".format(kind))
     if os.path.exists(path):
         print("The folder named '{}' already exists, exiting." .format(path))
         exit(1)
-    create_folder_structure(path, kind)
-    initialise_git(path)
+    os.makedirs(path)
+    tmpdir = tempfile.TemporaryDirectory()
+    tmppath = os.path.join(tmpdir.name, "project")
+    create_folder_structure(tmppath, kind)
+    initialise_git(tmppath)
+    for f in os.listdir(tmppath):
+        shutil.move(os.path.join(tmppath, f), path)
+    tmpdir.cleanup()
     create_virtualenv(path)
     install_packages(path)
     print("A new project was successfully initialised in '{}'.".format(path))
@@ -39,7 +49,7 @@ def initialise_project(path, kind):
 
 def create_folder_structure(path, kind):
     """Creates the folder structure in the given path"""
-    shutil.copytree(TEMPLATES[kind], path)
+    shutil.copytree(TEMPLATES["base"], path)
     merge_folders(TEMPLATES[kind], path)
 
 
@@ -71,6 +81,7 @@ def create_virtualenv(path):
 
 def install_packages(path):
     pip_cmd = os.path.join(path, VENV_FOLDER, "bin", "pip")
+    subprocess.run([pip_cmd, "install", "--upgrade", "pip", "setuptools"])
     with open(os.path.join(path, "requirements.txt")) as fobj:
         for package in fobj.readlines():
             subprocess.run([pip_cmd, "install", package])
@@ -83,7 +94,7 @@ def main():
         print(lc.version)
 
     if args["new"]:
-        initialise_project(args["PROJECT_PATH"], kind="analysis")
+        initialise_project(args["PROJECT_PATH"], kind=args['KIND'])
 
 
 if __name__ == "__main__":
