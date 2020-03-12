@@ -8,7 +8,7 @@ Usage:
     lubricate --version
 
 Options:
-    KIND          The kind of the project to create (analysis, python)
+    KIND          The kind of the project to create (currently only analysis)
                   [default: analysis]
     -h --help     Show this screen.
     -v            Verbose output.
