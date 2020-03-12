@@ -20,7 +20,9 @@ from docopt import docopt
 import lubricate as lc
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
-TEMPLATE_FOLDER = os.path.join(BASE_PATH, "template")
+TEMPLATES_PATH = os.path.join(BASE_PATH, "templates")
+TEMPLATE_BASE = os.path.join(TEMPLATES_PATH, "base")
+TEMPLATE_ANALYSIS = os.path.join(TEMPLATES_PATH, "analysis")
 VENV_FOLDER = "venv"
 
 
@@ -38,10 +40,14 @@ def initialise_project(path):
 
 def create_folder_structure(path):
     """Creates the folder structure in the given path"""
-    shutil.copytree(TEMPLATE_FOLDER, path)
+    print(TEMPLATE_BASE)
+    print(TEMPLATE_ANALYSIS)
+    shutil.copytree(TEMPLATE_BASE, path)
+    merge_folders(TEMPLATE_ANALYSIS, path)
 
 
 def merge_folders(source, destination):
+    """Copy all files to the destination and overwrite existing files."""
     for src_dir, dirs, files in os.walk(source):
         dst_dir = src_dir.replace(source, destination, 1)
         if not os.path.exists(dst_dir):
