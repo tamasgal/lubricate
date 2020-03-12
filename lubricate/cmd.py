@@ -62,7 +62,6 @@ def install_packages(path):
 
 def main():
     args = docopt(__doc__)
-    print(args)
 
     if args["--version"]:
         print(lc.version)
