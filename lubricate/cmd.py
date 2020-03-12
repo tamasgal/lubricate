@@ -15,11 +15,13 @@ Options:
 import os
 import shutil
 import subprocess
+import venv
 from docopt import docopt
 import lubricate as lc
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 TEMPLATE_FOLDER = os.path.join(BASE_PATH, "template")
+VENV_FOLDER = "venv"
 
 
 def initialise_project(path):
@@ -29,7 +31,8 @@ def initialise_project(path):
         exit(1)
     create_folder_structure(path)
     initialise_git(path)
-    # name = os.path.basename(path)
+    create_virtualenv(path)
+    install_packages(path)
     print("A new project was successfully initialised in '{}'.".format(path))
 
 
@@ -44,6 +47,17 @@ def initialise_git(path):
     subprocess.run(base_cmd + ["init"])
     subprocess.run(base_cmd + ["add", "."])
     subprocess.run(base_cmd + ["commit", "-m", "Initial commit"])
+
+
+def create_virtualenv(path):
+    venv.create(os.path.join(path, VENV_FOLDER), with_pip=True)
+
+
+def install_packages(path):
+    pip_cmd = os.path.join(path, VENV_FOLDER, "bin", "pip")
+    with open(os.path.join(path, "requirements.txt")) as fobj:
+        for package in fobj.readlines():
+            subprocess.run([pip_cmd, "install", package])
 
 
 def main():
