@@ -21,29 +21,26 @@ import lubricate as lc
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 TEMPLATES_PATH = os.path.join(BASE_PATH, "templates")
-TEMPLATE_BASE = os.path.join(TEMPLATES_PATH, "base")
-TEMPLATE_ANALYSIS = os.path.join(TEMPLATES_PATH, "analysis")
+TEMPLATES = {t: os.path.join(TEMPLATES_PATH, t) for t in ["base", "analysis"]}
 VENV_FOLDER = "venv"
 
 
-def initialise_project(path):
+def initialise_project(path, kind):
     """The main initialisation routine to create a project."""
     if os.path.exists(path):
         print("The folder named '{}' already exists, exiting." .format(path))
         exit(1)
-    create_folder_structure(path)
+    create_folder_structure(path, kind)
     initialise_git(path)
     create_virtualenv(path)
     install_packages(path)
     print("A new project was successfully initialised in '{}'.".format(path))
 
 
-def create_folder_structure(path):
+def create_folder_structure(path, kind):
     """Creates the folder structure in the given path"""
-    print(TEMPLATE_BASE)
-    print(TEMPLATE_ANALYSIS)
-    shutil.copytree(TEMPLATE_BASE, path)
-    merge_folders(TEMPLATE_ANALYSIS, path)
+    shutil.copytree(TEMPLATES[kind], path)
+    merge_folders(TEMPLATES[kind], path)
 
 
 def merge_folders(source, destination):
@@ -86,7 +83,7 @@ def main():
         print(lc.version)
 
     if args["new"]:
-        initialise_project(args["PROJECT_PATH"])
+        initialise_project(args["PROJECT_PATH"], kind="analysis")
 
 
 if __name__ == "__main__":
