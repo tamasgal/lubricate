@@ -1,13 +1,14 @@
 [run]
-source = foo
+source = {{: Package name :}}
 
 [report]
 include =
-    foo/*
+    {{: Package name :}}/*
 omit =
     */__version__.py
     */tests/*
     */*/tests/*
+    tests/*
 exclude_lines =
     pragma: no cover
     raise AssertionError

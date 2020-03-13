@@ -8,11 +8,11 @@ Foo setup script.
 
 from setuptools import setup, find_packages
 
-PACKAGE_NAME = 'foo'
-URL = 'https://git.km3net.de/yname/foo'
-DESCRIPTION = 'The foo project.'
-__author__ = 'Your Name'
-__email__ = 'yname@km3net.de'
+PACKAGE_NAME = '{{: Package name :}}'
+URL = '{{: Git repository URL :}}'
+DESCRIPTION = '{{: Package description :}}'
+__author__ = '{{: Author :}}'
+__email__ = '{{: Email :}}'
 
 with open('requirements.txt') as fobj:
     REQUIREMENTS = [l.strip() for l in fobj.readlines()]
@@ -29,7 +29,7 @@ setup(
     setup_requires=['setuptools_scm'],
     use_scm_version=True,
     install_requires=REQUIREMENTS,
-    python_requires='>=2.7',
+    python_requires='>=3.5',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',

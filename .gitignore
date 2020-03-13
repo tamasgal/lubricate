@@ -1,5 +1,5 @@
 # Versioning
-lubricate/version.py
+{{: Package name :}}/version.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
