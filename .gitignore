@@ -1,5 +1,5 @@
 # Versioning
-{{: Package name :}}/version.py
+lubricate/version.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -18,6 +18,8 @@ eggs/
 sdist/
 *.egg-info/
 *.egg
+.eggs/
+pip-wheel-metadata/
 
 # Unit test / coverage reports
 .tox/
