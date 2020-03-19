@@ -1,3 +1,0 @@
-# {{: Title :}}
-
-Author: {{: Author :}}
